@@ -26,22 +26,41 @@ def calculate_delta_velocity(initial_mass, final_mass, exhaust_velocity):
 
     return delta_velocity
 
-def calculate_mass_ratio(exhaust_velocity):
+def calculate_fuel_fraction(exhaust_velocity):
     delta_velocity = float(input("Maximum Theoretical Speed (m/s): "))
 
     print('')
 
-    mass_ratio = math.exp(delta_velocity / exhaust_velocity)
-    print(f"Fuel fraction is {mass_ratio}%")
+    mass_ratio = math.exp(-1 * (delta_velocity / exhaust_velocity))
+    fuel_fraction = (1 - mass_ratio) * 100
+    print(f"Fuel fraction is {fuel_fraction}%")
 
-    return mass_ratio
+    return fuel_fraction
 
-response = input("Rocket Parameter or Change in Velocity [X/Y]: ")
+def calculate_specific_impulse(initial_mass, final_mass):
+    delta_velocity = float(input("Maximum Theoretical Speed (m/s): "))
+    mass_ratio = initial_mass / final_mass
+    ln_mass_ratio = math.log(mass_ratio)
+
+    exhaust_velocity = delta_velocity / ln_mass_ratio
+
+    print('')
+
+    specific_impulse = exhaust_velocity / gravity
+    print(f"Required engine efficiency {specific_impulse} s")
+
+    return specific_impulse
+
+response = input("Rocket Parameters or Change in Velocity [X/Y]: ")
 
 if response == "X":
-    exhaust_velocity = get_simulation_parameters(gravity)
-    calculate_mass_ratio(exhaust_velocity)
-
+    response_1 = input("Fuel Fraction or Specific Impulse [A/B]: ")
+    if response_1 == "A":
+        exhaust_velocity = get_simulation_parameters(gravity)
+        calculate_fuel_fraction(exhaust_velocity)
+    elif response_1 == "B":
+        initial_mass, final_mass = get_rocket_parameters()
+        calculate_specific_impulse(initial_mass, final_mass)
 elif response == "Y":
     initial_mass, final_mass = get_rocket_parameters()
     exhaust_velocity = get_simulation_parameters(gravity)
