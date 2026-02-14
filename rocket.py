@@ -51,16 +51,39 @@ def calculate_specific_impulse(initial_mass, final_mass):
 
     return specific_impulse
 
+def calculate_thrust(exhaust_velocity, intitial_mass, final_mass):
+    thrust = exhaust_velocity * (intitial_mass - final_mass)
+
+    print('')
+
+    print(f"Thrust is {thrust} N")
+
+    return thrust
+
+def calculate_burn_time(exhaust_velocity, initial_mass, final_mass, thrust):
+    mass_flow_rate = thrust / exhaust_velocity
+
+    burn_time = (initial_mass - final_mass) / mass_flow_rate
+    print(f"Burn time is {burn_time} s")
+
+    return burn_time
+
 response = input("Rocket Parameters or Change in Velocity [X/Y]: ")
 
 if response == "X":
-    response_1 = input("Fuel Fraction or Specific Impulse [A/B]: ")
+    response_1 = input("Fuel Fraction, Specific Impulse, or Burn Time [A/B/C]: ")
     if response_1 == "A":
         exhaust_velocity = get_simulation_parameters(gravity)
         calculate_fuel_fraction(exhaust_velocity)
     elif response_1 == "B":
         initial_mass, final_mass = get_rocket_parameters()
         calculate_specific_impulse(initial_mass, final_mass)
+    elif response_1 == "C":
+        initial_mass, final_mass = get_rocket_parameters()
+        exhaust_velocity = get_simulation_parameters(gravity)
+        thrust = calculate_thrust(exhaust_velocity, initial_mass, final_mass)
+        calculate_burn_time(exhaust_velocity, initial_mass, final_mass, thrust)
+        
 elif response == "Y":
     initial_mass, final_mass = get_rocket_parameters()
     exhaust_velocity = get_simulation_parameters(gravity)
