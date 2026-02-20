@@ -47,7 +47,7 @@ def calculate_specific_impulse(initial_mass, final_mass):
     print('')
 
     specific_impulse = exhaust_velocity / gravity
-    print(f"Required engine efficiency {specific_impulse} s")
+    print(f"Required engine efficiency is {specific_impulse} s")
 
     return specific_impulse
 
